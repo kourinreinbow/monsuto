@@ -1,0 +1,7 @@
+#message {
+    opacity: 0;
+    
+    &.is-active {
+      opacity: 1;  
+    }
+  }

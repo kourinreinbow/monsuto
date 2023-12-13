@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>モンスト</title>
+    <link rel="stylesheet" href="index.css" type="text/css">
+</head>
+<body>
+    
+    <p><label for="title">タイトル：</label><input type="text" id="title"></p>
+    <p><label for="level">難易度：</label><input type="text" id="level"></p>
+    <p><label for="monsuto_text">テキスト：</label><textarea id="monsuto_text"></textarea></p>
+    <input type="button" value="コピー" id="copy_button">
+    <p id="changed_element" style="white-space:pre-wrap;"></p>
+    <p id="message">クリップボードにコピーしました！</p>
+
+    <script>
+        let title_element = document.getElementById("title");
+        let level_element = document.getElementById("level");
+        let monsuto_element = document.getElementById("monsuto_text");
+        let button_element = document.getElementById("copy_button");
+        let changed_element = document.getElementById("changed_element");
+        
+        function text_changed(event)
+        {
+            let title = title_element.value;
+            let level = level_element.value;
+            let monsuto_text = monsuto_element.value;
+            let changed_text = monsuto_text;
+            if(title.length != 0)
+                changed_text = changed_text.replace(/「(.*?)（(.*?)）」/, "「"+title+"（$2）」");
+            if(level.length != 0)
+                changed_text = changed_text.replace(/「(.*?)（(.*?)）」/, "「$1（"+level+"）」");
+            // console.log(changed_text);
+            changed_element.textContent = changed_text;
+        }
+
+        function button_clicked(event)
+        {
+            // クリップボードにコピーする動作
+            if(navigator.clipboard)
+            {
+                let text = changed_element.textContent;
+                return navigator.clipboard.writeText(text).then(
+                    function(){
+                        messageActive()
+                    }
+                )
+            }
+            // ここまでクリップボードにコピーする
+        }
+        
+        // クリップボードへのコピーが成功したときに呼ばれる
+        function messageActive () {
+            message.classList.add('is-active')
+            setTimeout(() => {
+                message.classList.remove('is-active')
+            }, 1600)
+            }
+
+        title_element.addEventListener("change", text_changed);
+        level_element.addEventListener("change", text_changed);
+        monsuto_element.addEventListener("change", text_changed);
+        button_element.addEventListener("click", button_clicked);
+
+// モンストでマルチしない？
+// 「北斗残影（極）」
+// https://static.monster-strike.com/line/?target=stage&pass_code=NzA3MzYxMDY0MzE0
+// ↑このURLをタップすると、タップした人達同士で一緒にマルチプレイができるよ！
+    </script>
+</body>
+</html>
